@@ -1,0 +1,53 @@
+type User @entity {
+  id: Bytes!
+  balance: BigInt!
+}
+
+type PluginTotalSupply @entity {
+  id: Bytes!
+  totalSupply: BigInt!
+}
+
+type FairAuctionFactory @entity(immutable: true) {
+  id: ID!
+  fairAuctions: [FairAuction!]! @derivedFrom(field: "fairAuctionFactory")
+}
+
+type FairAuction @entity(immutable: false) {
+  id: Bytes!
+  fairAuctionFactory: FairAuctionFactory!
+  name: String!
+  projectToken1: String!
+  projectToken2: String!
+  presaleType: String!
+  hardcap: BigDecimal!
+  minToRaise: BigDecimal!
+  wlStage: Boolean!
+  maxTokenToDistribute: BigDecimal!
+  auctionTokenDecimals: BigInt!
+  saleToken: Bytes!
+  saleTokenDecimals: BigInt!
+  startTime: BigInt!
+  endTime: BigInt!
+  auctionTokenTotalSupply: BigDecimal!
+  finalPrice: BigDecimal!
+  currentRaised: BigDecimal!
+  circMarketCap: BigDecimal!
+  priceTracker: [FairAuctionPriceTracker!] @derivedFrom(field: "fairAuction")
+}
+
+type FairAuctionPriceTracker @entity(immutable: false) {
+  id: ID!
+  user: Bytes!
+  fairAuction: FairAuction!
+  timestamp: BigInt!
+  amount: BigInt!
+  currentPrice: BigDecimal!
+}
+
+type UserInAuction @entity(immutable: false) {
+  id: ID!
+  user: Bytes!
+  fairAuction: Bytes!
+  value: BigInt!
+}
